@@ -96,8 +96,19 @@ class IndexState extends State<IndexPage> {
   }
 
   Future<void> _handleCameraAndMic() async {
-    await PermissionHandler().requestPermissions(
-      [PermissionGroup.camera, PermissionGroup.microphone],
-    );
+//    await PermissionHandler().requestPermissions(
+//      [PermissionGroup.camera, PermissionGroup.microphone],
+//    );
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.microphone,
+    ].request();
+    print(statuses[Permission.location]);
+
+    if (statuses[Permission.location].isDenied) {
+      // We didn't ask for permission yet.
+      _handleCameraAndMic();
+    }
   }
+
 }
